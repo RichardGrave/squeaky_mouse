@@ -7,6 +7,9 @@ use std::time::Duration;
 use std::{env, process, thread};
 
 static THE_SWITCH: AtomicBool = AtomicBool::new(true);
+static USE_LEFT_MOUSE: AtomicBool = AtomicBool::new(true);
+static USE_RIGHT_MOUSE: AtomicBool = AtomicBool::new(false);
+static USE_MIDDLE_MOUSE: AtomicBool = AtomicBool::new(false);
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
@@ -22,6 +25,12 @@ fn main() {
         println!("If two numbers are specified, a random number between the two values is used\n");
         println!("END key quits the program");
         println!("PAGEDOWN key turns auto click on/off\n");
+        println!("Default the LEFT mouse button auto click is ON");
+        println!("Toggle on/off with F5\n");
+        println!("Default the RIGHT mouse button auto click is OFF");
+        println!("Toggle on/off with F6\n");
+        println!("Default the MIDDLE mouse button auto click is OFF");
+        println!("Toggle on/off with F7\n");
     }
 }
 
@@ -98,15 +107,12 @@ fn squeak_the_mouse(millisec_one: u64, millisec_two: u64) {
         if THE_SWITCH.load(Ordering::Relaxed) {
             // If mouse button is being pressed then send a mouse event
             // creating a auto click
-            if mouse.button_pressed[1] {
+            if USE_LEFT_MOUSE.load(Ordering::Relaxed) && mouse.button_pressed[1] {
                 enigo.mouse_down(MouseButton::Left);
-                println!("{:?}", mouse);
-            } else if mouse.button_pressed[2] {
+            } else if USE_RIGHT_MOUSE.load(Ordering::Relaxed) && mouse.button_pressed[2] {
                 enigo.mouse_down(MouseButton::Right);
-                println!("{:?}", mouse);
-            } else if mouse.button_pressed[3] {
+            } else if USE_MIDDLE_MOUSE.load(Ordering::Relaxed) && mouse.button_pressed[3] {
                 enigo.mouse_down(MouseButton::Middle);
-                println!("{:?}", mouse);
             }
         }
 
@@ -128,21 +134,45 @@ fn squeak_the_keys() {
                 // Just some random chosen keys
                 if *keycode == Keycode::End {
                     process::exit(1);
+
                 } else if *keycode == Keycode::PageDown {
                     let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
                     THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
 
-                    //TODO:RG Turn certain mouse buttons off by their own switch keys????
+                    println!("Auto-click: {}", check_on_off(new_switch_state));
+                } else if *keycode == Keycode::Numpad1 {
+                    let new_left_state = !USE_LEFT_MOUSE.load(Ordering::Relaxed);
+                    USE_LEFT_MOUSE.swap(new_left_state, Ordering::Relaxed);
 
-                    if new_switch_state {
-                        println!("Squeak-ON");
-                    } else {
-                        println!("Squeak-OFF");
-                    }
+                    println!("LEFT mouse button check: {}", check_on_off(new_left_state));
+                } else if *keycode == Keycode::Numpad2 {
+                    let new_right_state = !USE_RIGHT_MOUSE.load(Ordering::Relaxed);
+                    USE_RIGHT_MOUSE.swap(new_right_state, Ordering::Relaxed);
+
+                    println!(
+                        "RIGHT mouse button check: {}",
+                        check_on_off(new_right_state)
+                    );
+                } else if *keycode == Keycode::Numpad3 {
+                    let new_middle_state = !USE_MIDDLE_MOUSE.load(Ordering::Relaxed);
+                    USE_MIDDLE_MOUSE.swap(new_middle_state, Ordering::Relaxed);
+
+                    println!(
+                        "MIDDLE mouse button check: {}",
+                        check_on_off(new_middle_state)
+                    );
                 }
             }
         }
         prev_keys = keys;
         thread::sleep(Duration::from_millis(50));
+    }
+}
+
+fn check_on_off(button_on: bool) -> String {
+    if button_on {
+        String::from("ON")
+    } else {
+        String::from("OFF")
     }
 }
