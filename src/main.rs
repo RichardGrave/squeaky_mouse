@@ -134,9 +134,9 @@ fn squeak_the_keys() {
                     THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
 
                     if new_switch_state {
-                        println!("Squeak-OFF");
-                    } else {
                         println!("Squeak-ON");
+                    } else {
+                        println!("Squeak-OFF");
                     }
                 }
             }
