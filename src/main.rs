@@ -132,6 +132,8 @@ fn squeak_the_keys() {
                     let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
                     THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
 
+                    //TODO:RG Turn certain mouse buttons off by their own switch keys????
+
                     if new_switch_state {
                         println!("Squeak-ON");
                     } else {
