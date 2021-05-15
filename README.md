@@ -1,2 +1,2 @@
-# squeaky_mouse
-Auto mouse events on button click
+# Squeaky mouse
+Auto mouse clicker
