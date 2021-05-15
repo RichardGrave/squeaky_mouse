@@ -18,10 +18,10 @@ fn main() {
         handle_three_arguments(&arguments);
     } else {
         println!("\nNo arguments found.");
-        println!("Enter a number in milliseconds\n");
-        println!("If two numbers are specified, a random number between the two values is used");
+        println!("Enter a number in milliseconds");
+        println!("If two numbers are specified, a random number between the two values is used\n");
         println!("END key quits the program");
-        println!("PAGEDOWN key turns auto click on/off");
+        println!("PAGEDOWN key turns auto click on/off\n");
     }
 }
 
