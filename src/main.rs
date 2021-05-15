@@ -1,9 +1,8 @@
-use device_query::{DeviceQuery, DeviceState, Keycode, MouseState};
+use device_query::{DeviceQuery, DeviceState, Keycode};
 use enigo::{Enigo, MouseButton, MouseControllable};
 
 use rand::Rng;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{Arc, Mutex, Once};
 use std::time::Duration;
 use std::{env, process, thread};
 
@@ -128,7 +127,7 @@ fn squeak_the_keys() {
             if let Some(keycode) = keys.get(0) {
                 // Just some random chosen keys
                 if *keycode == Keycode::End {
-                    std::process::exit(1);
+                    process::exit(1);
                 } else if *keycode == Keycode::PageDown {
                     let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
                     THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
