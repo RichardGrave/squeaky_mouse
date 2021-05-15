@@ -1,11 +1,11 @@
 use device_query::{DeviceQuery, DeviceState, Keycode, MouseState};
 use enigo::{Enigo, MouseButton, MouseControllable};
 
-use std::sync::{Arc, Mutex, Once};
 use rand::Rng;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, Mutex, Once};
 use std::time::Duration;
 use std::{env, process, thread};
-use std::sync::atomic::{AtomicBool, Ordering};
 
 static THE_SWITCH: AtomicBool = AtomicBool::new(true);
 
@@ -21,6 +21,8 @@ fn main() {
         println!("\nNo arguments found.");
         println!("Enter a number in milliseconds\n");
         println!("If two numbers are specified, a random number between the two values is used");
+        println!("END key quits the program");
+        println!("PAGEDOWN key turns auto click on/off");
     }
 }
 
@@ -95,7 +97,6 @@ fn squeak_the_mouse(millisec_one: u64, millisec_two: u64) {
 
         // Only proceed if the auto click is enabled
         if THE_SWITCH.load(Ordering::Relaxed) {
-
             // If mouse button is being pressed then send a mouse event
             // creating a auto click
             if mouse.button_pressed[1] {
@@ -126,15 +127,15 @@ fn squeak_the_keys() {
         if keys != prev_keys {
             if let Some(keycode) = keys.get(0) {
                 // Just some random chosen keys
-                if *keycode == Keycode::Numpad5 || *keycode == Keycode::End {
+                if *keycode == Keycode::End {
                     std::process::exit(1);
-                }else if *keycode == Keycode::Numpad0 {
+                } else if *keycode == Keycode::PageDown {
                     let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
                     THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
 
                     if new_switch_state {
                         println!("Squeak-OFF");
-                    }else {
+                    } else {
                         println!("Squeak-ON");
                     }
                 }
