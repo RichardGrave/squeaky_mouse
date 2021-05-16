@@ -6,10 +6,6 @@ edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-#[dependencies.crossterm]
-#version = "0.19.0"
-#features = ["event-stream"]
-
 [dependencies]
 rand = "0.8.3"
 device_query = "0.2.8"
