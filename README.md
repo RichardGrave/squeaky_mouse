@@ -18,9 +18,10 @@ If one number (in milliseconds) is specified then a mouse click is fired every X
 If two numbers (both in milliseconds) are used, a number is randomly picked that lies between the specified values.
 
 ## Default
-Default the LEFT mouse button auto click is ON\
-Default the RIGHT mouse button auto click is OFF\
-Default the MIDDLE mouse button auto click is OFF
+Default the auto clicking is ENABLED
+* LEFT mouse button auto click is ON
+* RIGHT mouse button auto click is OFF
+* MIDDLE mouse button auto click is OFF
 
 ## Usable keys
 * END key quits the program
