@@ -19,13 +19,13 @@ const HELP_MESSAGE: &str = "\nNo arguments found.\n
     Enter a number in milliseconds
     If two numbers are specified, a random number between the two values is used\n
     END key quits the program
-    ALT + (Num-5 OR Numpad-5) turns auto click on/off\n
+    ALT + (Num-5 OR Numpad-5) turns ALL auto click ON/OFF\n
     Default the LEFT mouse button auto click is ON
-    ALT + (Num-1 OR Numpad-1) toggle on/off\n
+    ALT + (Num-1 OR Numpad-1) toggle ON/OFF\n
     Default the RIGHT mouse button auto click is OFF
-    ALT + (Num-2 OR Numpad-2) toggle on/off\n
+    ALT + (Num-2 OR Numpad-2) toggle ON/OFF\n
     Default the MIDDLE mouse button auto click is OFF
-    ALT + (Num-3 OR Numpad-3) toggle on/off\n";
+    ALT + (Num-3 OR Numpad-3) toggle ON/OFF\n";
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
