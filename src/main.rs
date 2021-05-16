@@ -24,7 +24,8 @@ fn main() {
         // We need 2 or 3 arguments
         handle_three_arguments(&arguments);
     } else {
-        println!("\nNo arguments found.\n
+        println!(
+            "\nNo arguments found.\n
         Enter a number in milliseconds\n
         If two numbers are specified, a random number between the two values is used\n\n
         END key quits the program\n
@@ -34,7 +35,8 @@ fn main() {
         Default the RIGHT mouse button auto click is OFF\n
         Toggle on/off with Numpad-2\n\n
         Default the MIDDLE mouse button auto click is OFF\n
-        Toggle on/off with Numpad-3\n\n");
+        Toggle on/off with Numpad-3\n\n"
+        );
     }
 }
 
@@ -135,44 +137,66 @@ fn squeak_the_keys() {
     let mut prev_keys = vec![];
 
     loop {
-        // Check the keys so we can exit the program when needed
-        let keys = device_state.get_keys();
+        // Reverse the keys. Because second key gets position 0 and the first postion 1.
+        // So this way instead of [Numpad5, LAlt] we get [LAlt, Numpad5]
+        // Easier to check if ALT is pressed
+        let keys: Vec<Keycode> = device_state.get_keys().into_iter().rev().collect();
+
         if keys != prev_keys {
             if let Some(keycode) = keys.get(0) {
-                // Just some random chosen keys
-                if *keycode == Keycode::End {
-                    process::exit(1);
-                } else if *keycode == Keycode::PageDown {
-                    let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
-                    THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
-
-                    println!("Auto-click: {}", check_on_off(new_switch_state));
-                } else if *keycode == Keycode::Numpad1 {
-                    let new_left_state = !USE_LEFT_MOUSE.load(Ordering::Relaxed);
-                    USE_LEFT_MOUSE.swap(new_left_state, Ordering::Relaxed);
-
-                    println!("LEFT mouse button check: {}", check_on_off(new_left_state));
-                } else if *keycode == Keycode::Numpad2 {
-                    let new_right_state = !USE_RIGHT_MOUSE.load(Ordering::Relaxed);
-                    USE_RIGHT_MOUSE.swap(new_right_state, Ordering::Relaxed);
-
-                    println!(
-                        "RIGHT mouse button check: {}",
-                        check_on_off(new_right_state)
-                    );
-                } else if *keycode == Keycode::Numpad3 {
-                    let new_middle_state = !USE_MIDDLE_MOUSE.load(Ordering::Relaxed);
-                    USE_MIDDLE_MOUSE.swap(new_middle_state, Ordering::Relaxed);
-
-                    println!(
-                        "MIDDLE mouse button check: {}",
-                        check_on_off(new_middle_state)
-                    );
+                match *keycode {
+                    // Exit the program
+                    Keycode::End => process::exit(1),
+                    // Alt key pressed and other button
+                    Keycode::LAlt | Keycode::RAlt => {
+                        // If we have a second key pressed
+                        if let Some(next_keycode) = keys.get(1) {
+                            change_mouse_listening(next_keycode);
+                        }
+                    }
+                    _ => (),
                 }
             }
         }
         prev_keys = keys;
         thread::sleep(Duration::from_millis(50));
+    }
+}
+
+fn change_mouse_listening(keycode: &Keycode) {
+    // Turn auto clicker on/off or the listening for a specific mouse button on/off
+    match *keycode {
+        Keycode::Numpad1 | Keycode::Key1 => {
+            let new_left_state = !USE_LEFT_MOUSE.load(Ordering::Relaxed);
+            USE_LEFT_MOUSE.swap(new_left_state, Ordering::Relaxed);
+
+            println!("LEFT mouse button check: {}", check_on_off(new_left_state));
+        }
+        Keycode::Numpad2 | Keycode::Key2 => {
+            let new_right_state = !USE_RIGHT_MOUSE.load(Ordering::Relaxed);
+            USE_RIGHT_MOUSE.swap(new_right_state, Ordering::Relaxed);
+
+            println!(
+                "RIGHT mouse button check: {}",
+                check_on_off(new_right_state)
+            );
+        }
+        Keycode::Numpad3 | Keycode::Key3 => {
+            let new_middle_state = !USE_MIDDLE_MOUSE.load(Ordering::Relaxed);
+            USE_MIDDLE_MOUSE.swap(new_middle_state, Ordering::Relaxed);
+
+            println!(
+                "MIDDLE mouse button check: {}",
+                check_on_off(new_middle_state)
+            );
+        }
+        Keycode::Numpad5 | Keycode::Key5 => {
+            let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
+            THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
+
+            println!("Auto-click: {}", check_on_off(new_switch_state));
+        }
+        _ => (),
     }
 }
 
