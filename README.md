@@ -15,7 +15,22 @@ So, I don't know if this works on other operating systems.
 
 This application needs 1 or 2 arguments.\
 If one number (in milliseconds) is specified then a mouse click is fired every X milliseconds.\
-If two numbers (both in milliseconds) are used, a number is randomly picked that lies between the specified values.
+If two numbers (both in milliseconds) are used, a randomly selected number is used that lies between the specified values.
+
+I've added randomly selected milliseconds so it's not too obvious that you're using an auto clicker.\
+So if you want to use that, don't use numbers that are too close together.\
+E.g. 150 and 175 is too close to each other and does not make much difference to the human eye.
+
+## How to start
+Examples:
+* Auto click every 100 milliseconds:\
+squeaky_mouse 100
+
+* Auto click every randomly selected number between 150 and 500 milliseconds:\
+squeaky_mouse 150 500
+
+First number cannot be lower than 50 milliseconds.\
+Second number? Well that depends on how long you'll want to wait for a next click.
 
 ## Default
 Default the auto clicking is ENABLED
