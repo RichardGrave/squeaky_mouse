@@ -32,6 +32,10 @@ squeaky_mouse 150 500
 First number cannot be lower than 50 milliseconds.\
 Second number? Well that depends on how long you'll want to wait for a next click.
 
+## How does it work?
+Just keep one of the mouse buttons pressed to use that buttons auto click.\
+When you release the button then the auto click pauses until you keep the button pressed again.
+
 ## Default
 Default the auto clicking is ENABLED
 * LEFT mouse button auto click is ON
