@@ -64,7 +64,7 @@ fn handle_two_arguments(arguments: &Vec<String>) {
 
     // Only check keys if mouse thread is also running
     if mouse_thread_running {
-        // Always check without sleep time
+        // Has a default sleep of 50 milliseconds
         squeak_the_keys();
     }
 }
@@ -97,7 +97,7 @@ fn handle_three_arguments(arguments: &Vec<String>) {
 
     // Only check keys if mouse thread is also running
     if mouse_thread_running {
-        // Always check without sleep time
+        // Has a default sleep of 50 milliseconds
         squeak_the_keys();
     }
 }
