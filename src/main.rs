@@ -15,6 +15,18 @@ static USE_LEFT_MOUSE: AtomicBool = AtomicBool::new(true);
 static USE_RIGHT_MOUSE: AtomicBool = AtomicBool::new(false);
 static USE_MIDDLE_MOUSE: AtomicBool = AtomicBool::new(false);
 
+const HELP_MESSAGE: &str = "\nNo arguments found.\n
+    Enter a number in milliseconds
+    If two numbers are specified, a random number between the two values is used\n
+    END key quits the program
+    ALT + (Num-5 OR Numpad-5) turns auto click on/off\n
+    Default the LEFT mouse button auto click is ON
+    ALT + (Num-1 OR Numpad-1) toggle on/off\n
+    Default the RIGHT mouse button auto click is OFF
+    ALT + (Num-2 OR Numpad-2) toggle on/off\n
+    Default the MIDDLE mouse button auto click is OFF
+    ALT + (Num-3 OR Numpad-3) toggle on/off\n";
+
 fn main() {
     let arguments: Vec<String> = env::args().collect();
 
@@ -24,19 +36,7 @@ fn main() {
         // We need 2 or 3 arguments
         handle_three_arguments(&arguments);
     } else {
-        println!(
-            "\nNo arguments found.\n
-        Enter a number in milliseconds\n
-        If two numbers are specified, a random number between the two values is used\n\n
-        END key quits the program\n
-        PAGEDOWN key turns auto click on/off\n\n
-        Default the LEFT mouse button auto click is ON\n
-        Toggle on/off with Numpad-1\n\n
-        Default the RIGHT mouse button auto click is OFF\n
-        Toggle on/off with Numpad-2\n\n
-        Default the MIDDLE mouse button auto click is OFF\n
-        Toggle on/off with Numpad-3\n\n"
-        );
+        println!("{}", HELP_MESSAGE);
     }
 }
 
