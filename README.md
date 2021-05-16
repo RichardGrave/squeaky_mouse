@@ -52,5 +52,5 @@ enigo = "0.0.14"\
 crossterm = "0.19.0"
 
 ## Issues
-When you close the program the used keys are promted on the command line.
+When the program is closed then the used keys are promted on the command line.\
 Not sure if I can find a way to fix this.
