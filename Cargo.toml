@@ -14,6 +14,7 @@ edition = "2018"
 rand = "0.8.3"
 device_query = "0.2.8"
 enigo = "0.0.14"
+crossterm = "0.19.0"
 
 [profile.dev]
 opt-level = 3

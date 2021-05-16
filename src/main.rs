@@ -1,7 +1,10 @@
 use device_query::{DeviceQuery, DeviceState, Keycode};
 use enigo::{Enigo, MouseButton, MouseControllable};
 
+use crossterm::terminal::{self, ClearType};
+use crossterm::{cursor, execute, style};
 use rand::Rng;
+use std::io::stdout;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 use std::{env, process, thread};
@@ -28,15 +31,23 @@ const HELP_MESSAGE: &str = "\nNo arguments found.\n
     ALT + (Num-3 OR Numpad-3) toggle ON/OFF\n";
 
 fn main() {
-    let arguments: Vec<String> = env::args().collect();
+    //Try to enter alternate screen or print error
+    if let Err(err_mess) = execute!(stdout(), terminal::EnterAlternateScreen) {
+        println!("{}", err_mess);
+    }
+    if let Ok(_raw) = terminal::enable_raw_mode() {
+        clear_term();
 
-    if arguments.len() == 2 {
-        handle_two_arguments(&arguments);
-    } else if arguments.len() == 3 {
-        // We need 2 or 3 arguments
-        handle_three_arguments(&arguments);
-    } else {
-        println!("{}", HELP_MESSAGE);
+        let arguments: Vec<String> = env::args().collect();
+
+        if arguments.len() == 2 {
+            handle_two_arguments(&arguments);
+        } else if arguments.len() == 3 {
+            // We need 2 or 3 arguments
+            handle_three_arguments(&arguments);
+        } else {
+            println!("{}", HELP_MESSAGE);
+        }
     }
 }
 
@@ -126,9 +137,52 @@ fn squeak_the_mouse(millisec_one: u64, millisec_two: u64) {
             }
         }
 
+        // Show on screen the state of all the auto mouse clicking
+        show_mouse_on_off();
+
         // Sleep for a random time
         let sleep_time = rand::thread_rng().gen_range(millisec_one..=millisec_two);
         thread::sleep(Duration::from_millis(sleep_time));
+    }
+}
+
+fn show_mouse_on_off() {
+    //Print to screen or give error message if it fails
+
+    // Message ALL mouse buttons
+    let all_message = format!(
+        "Auto-clicker : {}  [Even if the others below are ON, this will stop ALL auto-clicking] ",
+        check_on_off(THE_SWITCH.load(Ordering::Relaxed))
+    );
+    if let Err(err_mess) = execute!(stdout(), cursor::MoveTo(1, 1), style::Print(all_message)) {
+        println!("{}", err_mess);
+    }
+
+    let left_message = format!(
+        "LEFT-mouse   : {} ",
+        check_on_off(USE_LEFT_MOUSE.load(Ordering::Relaxed))
+    );
+    // Message LEFT mouse button
+    if let Err(err_mess) = execute!(stdout(), cursor::MoveTo(1, 2), style::Print(left_message)) {
+        println!("{}", err_mess);
+    }
+
+    let right_message = format!(
+        "RIGHT-mouse  : {} ",
+        check_on_off(USE_RIGHT_MOUSE.load(Ordering::Relaxed))
+    );
+    // Message RIGHT mouse button
+    if let Err(err_mess) = execute!(stdout(), cursor::MoveTo(1, 3), style::Print(right_message)) {
+        println!("{}", err_mess);
+    }
+
+    let middle_message = format!(
+        "MIDDLE-mouse : {} ",
+        check_on_off(USE_MIDDLE_MOUSE.load(Ordering::Relaxed))
+    );
+    // Message MIDDLE mouse button
+    if let Err(err_mess) = execute!(stdout(), cursor::MoveTo(1, 4), style::Print(middle_message)) {
+        println!("{}", err_mess);
     }
 }
 
@@ -146,7 +200,7 @@ fn squeak_the_keys() {
             if let Some(keycode) = keys.get(0) {
                 match *keycode {
                     // Exit the program
-                    Keycode::End => process::exit(1),
+                    Keycode::End => cleanup_on_exit(),
                     // Alt key pressed and other button
                     Keycode::LAlt | Keycode::RAlt => {
                         // If we have a second key pressed
@@ -169,32 +223,18 @@ fn change_mouse_listening(keycode: &Keycode) {
         Keycode::Numpad1 | Keycode::Key1 => {
             let new_left_state = !USE_LEFT_MOUSE.load(Ordering::Relaxed);
             USE_LEFT_MOUSE.swap(new_left_state, Ordering::Relaxed);
-
-            println!("LEFT mouse button check: {}", check_on_off(new_left_state));
         }
         Keycode::Numpad2 | Keycode::Key2 => {
             let new_right_state = !USE_RIGHT_MOUSE.load(Ordering::Relaxed);
             USE_RIGHT_MOUSE.swap(new_right_state, Ordering::Relaxed);
-
-            println!(
-                "RIGHT mouse button check: {}",
-                check_on_off(new_right_state)
-            );
         }
         Keycode::Numpad3 | Keycode::Key3 => {
             let new_middle_state = !USE_MIDDLE_MOUSE.load(Ordering::Relaxed);
             USE_MIDDLE_MOUSE.swap(new_middle_state, Ordering::Relaxed);
-
-            println!(
-                "MIDDLE mouse button check: {}",
-                check_on_off(new_middle_state)
-            );
         }
         Keycode::Numpad5 | Keycode::Key5 => {
             let new_switch_state = !THE_SWITCH.load(Ordering::Relaxed);
             THE_SWITCH.swap(new_switch_state, Ordering::Relaxed);
-
-            println!("Auto-click: {}", check_on_off(new_switch_state));
         }
         _ => (),
     }
@@ -206,4 +246,38 @@ fn check_on_off(button_on: bool) -> String {
     } else {
         String::from("OFF")
     }
+}
+
+//Clear terminal
+fn clear_term() {
+    //Print to screen or give error message if it fails
+    if let Err(err_mess) = execute!(
+        stdout(),
+        cursor::MoveTo(1, 1),
+        terminal::Clear(ClearType::All),
+    ) {
+        println!("{}", err_mess);
+    }
+}
+
+//Do all this if we want to exit the program
+fn cleanup_on_exit() {
+    // print_at_pos(0, cursor::position().unwrap().1, "Quiting the program");
+
+    // disable mouse events to be captured or print error if it fails
+    if let Ok(_raw) = terminal::disable_raw_mode() {
+        if let Err(error_mess) = execute!(stdout()) {
+            println!("{}", error_mess);
+        }
+    }
+
+    clear_term();
+
+    //Try to leave this screen and go back to the one we started this program in or print error
+    if let Err(err_mess) = execute!(stdout(), terminal::LeaveAlternateScreen) {
+        println!("{}", err_mess);
+    }
+
+    //Stop the program
+    std::process::exit(1);
 }
