@@ -6,9 +6,9 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
 use std::{env, process, thread};
 
-const LEFT_MOUSE_POSITION: usize = 1;
-const RIGHT_MOUSE_POSITION: usize = 2;
-const MIDDLE_MOUSE_POSITION: usize = 3;
+const LEFT_MOUSE_POS: usize = 1;
+const RIGHT_MOUSE_POS: usize = 2;
+const MIDDLE_MOUSE_POS: usize = 3;
 
 static THE_SWITCH: AtomicBool = AtomicBool::new(true);
 static USE_LEFT_MOUSE: AtomicBool = AtomicBool::new(true);
