@@ -7,7 +7,7 @@ use rand::Rng;
 use std::io::stdout;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Duration;
-use std::{env, process, thread};
+use std::{env, thread};
 
 const LEFT_MOUSE_POS: usize = 1;
 const RIGHT_MOUSE_POS: usize = 2;
