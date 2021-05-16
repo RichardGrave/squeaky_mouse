@@ -24,17 +24,17 @@ fn main() {
         // We need 2 or 3 arguments
         handle_three_arguments(&arguments);
     } else {
-        println!("\nNo arguments found.");
-        println!("Enter a number in milliseconds");
-        println!("If two numbers are specified, a random number between the two values is used\n");
-        println!("END key quits the program");
-        println!("PAGEDOWN key turns auto click on/off\n");
-        println!("Default the LEFT mouse button auto click is ON");
-        println!("Toggle on/off with F5\n");
-        println!("Default the RIGHT mouse button auto click is OFF");
-        println!("Toggle on/off with F6\n");
-        println!("Default the MIDDLE mouse button auto click is OFF");
-        println!("Toggle on/off with F7\n");
+        println!("\nNo arguments found.\n
+        Enter a number in milliseconds\n
+        If two numbers are specified, a random number between the two values is used\n\n
+        END key quits the program\n
+        PAGEDOWN key turns auto click on/off\n\n
+        Default the LEFT mouse button auto click is ON\n
+        Toggle on/off with Numpad-1\n\n
+        Default the RIGHT mouse button auto click is OFF\n
+        Toggle on/off with Numpad-2\n\n
+        Default the MIDDLE mouse button auto click is OFF\n
+        Toggle on/off with Numpad-3\n\n");
     }
 }
 
