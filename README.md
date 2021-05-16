@@ -1,5 +1,5 @@
 # Squeaky Mouse
-## Auto mouse clicker.
+## Auto mouse clicker
 
 My kids play a lot of computer games, including Roblox.\
 In some Roblox games you have to click a lot with the mouse buttons to do something.\
@@ -50,3 +50,7 @@ rand = "0.8.3"\
 device_query = "0.2.8"\
 enigo = "0.0.14"\
 crossterm = "0.19.0"
+
+## Issues
+When you close the program the used keys are promted on the command line.
+Not sure if I can find a way to fix this.
