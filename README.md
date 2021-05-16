@@ -41,9 +41,9 @@ Default the auto clicking is ENABLED
 ## Usable keys
 * END key quits the program
 * ALT + (Num-5 or Numpad-5) turns ALL auto click ON/OFF
-* ALT + (Num-1 or Numpad-1) toggle ON/OFF
-* ALT + (Num-2 or Numpad-2) toggle ON/OFF
-* ALT + (Num-3 or Numpad-3) toggle ON/OFF
+* ALT + (Num-1 or Numpad-1) toggle LEFT mouse button auto click ON/OFF
+* ALT + (Num-2 or Numpad-2) toggle RIGHT mouse button auto click ON/OFF
+* ALT + (Num-3 or Numpad-3) toggle MIDDLE mouse button auto click ON/OFF
 
 ## Dependencies
 rand = "0.8.3"\
