@@ -28,3 +28,9 @@ Default the MIDDLE mouse button auto click is OFF
 * ALT + (Num-1 or Numpad-1) toggle ON/OFF
 * ALT + (Num-2 or Numpad-2) toggle ON/OFF
 * ALT + (Num-3 or Numpad-3) toggle ON/OFF
+
+## Dependencies
+rand = "0.8.3"\
+device_query = "0.2.8"\
+enigo = "0.0.14"\
+crossterm = "0.19.0"
