@@ -4,7 +4,7 @@
 My kids play a lot of computer games, including Roblox.\
 In some Roblox games you have to click a lot with the mouse buttons to do something.\
 E.g. The Roblox game 'BIG Paintball!' where you have to click a lot with certain weapons.\
-Since my youngest son cannot click that quickly and my oldest son has a muscle disease,\
+Since my youngest son cannot click that quickly and my oldest son has a Muscular Dystrophy,\
 I thought it would be fun to make an auto mouse clicker.\
 Of course there are more auto clickers available on the internet,\
 but I thought it would be fun to see if I could make one myself.
